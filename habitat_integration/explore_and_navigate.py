@@ -157,7 +157,7 @@ def load_topomap_from_data(data_dir):
     print(f"Loading complete. Topomap contains {len(topomap)} nodes.")
     return topomap
 
-def navigate_environment(sim, nomad_model, topomap, start_frame=1, target_frame=20, frames_list=None):
+def navigate_environment(sim, nomad_model, topomap, start_frame=1, target_frame=20, frames_list=None, enable_recovery=True):
     """
     Navigation Phase: Route back to a specific target in the topological map 
     from a completely different starting location.
@@ -231,7 +231,7 @@ def navigate_environment(sim, nomad_model, topomap, start_frame=1, target_frame=
         
         # Obstacle Recovery
         # A move_forward action normally moves 0.25m. If we move less than 0.15m, we are sliding against geometry.
-        if action_name == "move_forward" and compute_euclidean_distance(prev_pos, curr_pos) < 0.15:
+        if enable_recovery and action_name == "move_forward" and compute_euclidean_distance(prev_pos, curr_pos) < 0.15:
             print(f"[Recovery] Collision detected at step {steps} (Moved {compute_euclidean_distance(prev_pos, curr_pos):.2f}m). Executing reverse maneuver...")
             
             # Step backward to disengage from collision geometry
@@ -263,6 +263,15 @@ def navigate_environment(sim, nomad_model, topomap, start_frame=1, target_frame=
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Navigate using NoMaD and a Topomap")
+    parser.add_argument("--start-frame", type=int, default=1, help="Start frame ID")
+    parser.add_argument("--target-frame", type=int, default=70, help="Target/Goal frame ID")
+    parser.add_argument("--no-recovery", action="store_true", help="Disable collision recovery maneuver")
+    parser.add_argument("--scene-id", type=str, default="/scratch/aditya.vadali/00011-1W61QJVDBqe/1W61QJVDBqe.basis.glb", help="Path to scene GLB")
+    parser.add_argument("--data-dir", type=str, default="/scratch/aditya.vadali/data/1W61QJVDBqe", help="Path to topomap data")
+    args = parser.parse_args()
+
     # Model Configuration
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     nomad_config_path = os.path.join(base_dir, "habitat_integration/config/nomad.yaml")
@@ -273,7 +282,7 @@ def main():
     model_path = os.path.join(base_dir, "deployment/model_weights/nomad.pth")
     model_config_path = os.path.join(base_dir, "train/config/nomad.yaml")
     
-    scene_id = "/scratch/aditya.vadali/00011-1W61QJVDBqe/1W61QJVDBqe.basis.glb" # Using evaluated test scene
+    scene_id = args.scene_id
     
     print("Loading Headless Habitat Environment...")
     sim = create_headless_env(scene_id)
@@ -290,11 +299,19 @@ def main():
     video_frames = []
     
     # 1. Load Data
-    data_dir = "/scratch/aditya.vadali/data/1W61QJVDBqe"
+    data_dir = args.data_dir
     topomap = load_topomap_from_data(data_dir)
     
     # 2. Navigation
-    target_node = navigate_environment(sim, nomad_model, topomap, start_frame=1, target_frame=70, frames_list=video_frames)
+    target_node = navigate_environment(
+        sim, 
+        nomad_model, 
+        topomap, 
+        start_frame=args.start_frame, 
+        target_frame=args.target_frame, 
+        frames_list=video_frames,
+        enable_recovery=not args.no_recovery
+    )
     
     sim.close()
     

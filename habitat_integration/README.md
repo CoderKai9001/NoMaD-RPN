@@ -55,9 +55,9 @@ This integration allows you to evaluate pre-trained NoMaD models in simulation:
 
    Look at `ENV_SETUP.md` for environment setup details.
 
-3. **Habitat and HM3D installed** (you confirmed this is done)
+3. **Habitat and HM3D installed** 
 
-4. **Pre-trained NoMaD model checkpoint** (you have this)
+4. **Pre-trained NoMaD model checkpoint** 
 
 ### Configuration
 
@@ -110,6 +110,21 @@ conda activate nomad_train
 cd habitat_integration
 python habitat_imagenav.py
 ```
+
+### Visual Output & Topological Exploration
+
+To run a specific sequence visually and generate `.mp4` tracking outputs from loaded topological maps, use the `explore_and_navigate.py` script:
+
+```bash
+python explore_and_navigate.py --start-frame 1 --target-frame 70
+```
+
+Options:
+- `--start-frame`: ID of the frame to spawn the agent at (default: 1).
+- `--target-frame`: ID of the goal image frame (default: 70).
+- `--no-recovery`: Disable backward-step collision recovery maneuvers.
+- `--scene-id`: Custom `.glb` scene path.
+- `--data-dir`: Custom path containing `/poses/` and `/images_fov90/` structure.
 
 ### Custom Configuration
 
