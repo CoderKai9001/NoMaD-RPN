@@ -12,11 +12,11 @@ image_size: [96, 96]        # Model input size (width, height)
 normalize: true             # Whether model was trained with action normalization
 
 # Waypoint selection
-waypoint_index: 2           # Which waypoint to execute from trajectory (0-7)
+waypoint_index: 1           # Which waypoint to execute from trajectory (0-7)
                             # Index 2 is default from deployment (good balance)
 
 # Action conversion thresholds (tunable)
 forward_step: 0.25          # Habitat's MOVE_FORWARD distance (meters)
 turn_angle: 10.0            # Habitat's TURN_LEFT/RIGHT angle (degrees)
 distance_threshold: 0.15    # Minimum distance to waypoint to move forward (meters)
-angle_threshold: 5.0        # Minimum angle to trigger fine turning (degrees)
+angle_threshold: 2.0        # Minimum angle to trigger fine turning (degrees)

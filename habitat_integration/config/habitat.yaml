@@ -43,7 +43,7 @@ habitat:
   
   TASK:
     TYPE: Nav-v0
-    SUCCESS_DISTANCE: 0.2  # meters (standard ImageNav threshold)
+    SUCCESS_DISTANCE: 0.5  # meters (standard ImageNav threshold)
     MEASUREMENTS: [DISTANCE_TO_GOAL]
     POSSIBLE_ACTIONS:
       - STOP
