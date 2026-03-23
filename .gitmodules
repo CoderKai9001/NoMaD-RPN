@@ -1,0 +1,6 @@
+[submodule "habitat-sim"]
+	path = habitat-sim
+	url = https://github.com/facebookresearch/habitat-sim.git
+[submodule "diffusion_policy"]
+	path = diffusion_policy
+	url = https://github.com/real-stanford/diffusion_policy.git

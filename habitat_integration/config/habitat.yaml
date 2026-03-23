@@ -1,0 +1,58 @@
+habitat:
+  # Habitat simulator configuration for ImageNav with HM3D scenes
+  
+  ENVIRONMENT:
+    MAX_EPISODE_STEPS: 500
+    ITERATOR_OPTIONS:
+      SHUFFLE: False
+      MAX_SCENE_REPEAT_EPISODES: -1
+  
+  SIMULATOR:
+    TYPE: Habitat-Sim-v0
+    ACTION_SPACE_CONFIG: v0
+    FORWARD_STEP_SIZE: 0.25  # meters
+    TURN_ANGLE: 10           # degrees
+  
+    HABITAT_SIM_V0:
+      GPU_DEVICE_ID: 0
+      ALLOW_SLIDING: True
+  
+    # Agent configuration (match LoCoBot dimensions)
+    AGENT_0:
+      HEIGHT: 0.88      # meters (LoCoBot camera height)
+      RADIUS: 0.18      # meters (LoCoBot footprint)
+      SENSORS: [RGB_SENSOR]
+      IS_SET_START_STATE: False
+      START_POSITION: [0, 0, 0]
+      START_ROTATION: [0, 0, 0, 1]
+  
+    # RGB sensor configuration
+    RGB_SENSOR:
+      WIDTH: 160
+      HEIGHT: 120
+      HFOV: 90               # degrees (horizontal field of view)
+      POSITION: [0, 0.88, 0]  # At agent height
+      ORIENTATION: [0, 0, 0]
+      NORMALIZE_RGB: False   # We handle normalization in NoMaD wrapper
+  
+  DATASET:
+    TYPE: ImageNav-v1
+    SPLIT: val
+    SCENES_DIR: data/scene_datasets/
+    CONTENT_SCENES: []  # Will be set programmatically per scene
+  
+  TASK:
+    TYPE: Nav-v0
+    SUCCESS_DISTANCE: 0.2  # meters (standard ImageNav threshold)
+    MEASUREMENTS: [DISTANCE_TO_GOAL]
+    POSSIBLE_ACTIONS:
+      - STOP
+      - MOVE_FORWARD
+      - TURN_LEFT
+      - TURN_RIGHT
+  
+    # Sensors available to the agent
+    SENSORS: [RGB_SENSOR]
+  
+    # Goal specification (for ImageNav)
+    GOAL_SENSOR_UUID: imagegoal

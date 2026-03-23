@@ -1,0 +1,27 @@
+# Evaluation configuration for NoMaD on HM3D scenes
+
+experiment_name: nomad_hm3d_test
+output_dir: results/
+
+# Episode generation parameters
+num_episodes_per_scene: 5      # Start with 5 episodes per scene for testing
+min_geodesic_distance: 5.0     # Minimum goal distance (meters)
+max_geodesic_distance: 15.0    # Maximum goal distance (meters)
+
+# HM3D scenes to evaluate on (starting with 3 scenes for testing)
+hm3d_scenes:
+  - /scratch/aditya.vadali/00011-1W61QJVDBqe/1W61QJVDBqe.basis.glb
+  - /scratch/aditya.vadali/00074-kHvNo8x6Qoe/kHvNo8x6Qoe.basis.glb
+  - /scratch/aditya.vadali/00705-2XVvKEDd54w/2XVvKEDd54w.basis.glb
+
+# Stopping criteria
+success_distance: 0.2              # Success threshold (meters)
+temporal_distance_threshold: 3.0   # Model's temporal distance threshold
+max_steps: 500                     # Maximum steps per episode
+stuck_threshold: 10                # Steps to check for stuck detection
+stuck_distance: 0.1                # Max displacement to be considered stuck (meters)
+
+# Logging and output
+log_frequency: 5                   # Print episode details every N episodes
+save_trajectory: True              # Save agent trajectories in results
+save_observations: False           # Save RGB observations (disk intensive!)

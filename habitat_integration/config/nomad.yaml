@@ -1,0 +1,22 @@
+# NoMaD model configuration for Habitat integration
+
+# Model paths
+model_config_path: ../train/config/nomad.yaml
+checkpoint_path: ../deployment/model_weights/nomad.pth
+
+# Inference parameters (from train/config/nomad.yaml)
+num_samples: 8              # Number of diffusion trajectory samples
+num_diffusion_iters: 10     # DDPM denoising iterations
+context_size: 3             # Number of temporal context frames
+image_size: [96, 96]        # Model input size (width, height)
+normalize: true             # Whether model was trained with action normalization
+
+# Waypoint selection
+waypoint_index: 2           # Which waypoint to execute from trajectory (0-7)
+                            # Index 2 is default from deployment (good balance)
+
+# Action conversion thresholds (tunable)
+forward_step: 0.25          # Habitat's MOVE_FORWARD distance (meters)
+turn_angle: 10.0            # Habitat's TURN_LEFT/RIGHT angle (degrees)
+distance_threshold: 0.15    # Minimum distance to waypoint to move forward (meters)
+angle_threshold: 5.0        # Minimum angle to trigger fine turning (degrees)
